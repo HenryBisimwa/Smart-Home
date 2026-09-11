@@ -13,6 +13,22 @@ let vchambre=document.getElementById("vchambre")
 let porte=document.getElementById("porte")
 let alarme=document.getElementById("alarme")
 
+const ESP32_URL = "http://192.168.1.50"
+
+function envoyerCommande(appareil, action) {
+    fetch(`${ESP32_URL}/${appareil}/${action}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur de communication avec l'ESP32")
+            }
+
+            console.log(`Commande envoyée : ${appareil} → ${action}`)
+        })
+        .catch(error => {
+            console.log("ESP32 non disponible :", error)
+        })
+}
+
 
 Btneclairage.addEventListener("click",()=>{
 Btneclairage.style.backgroundColor = "#13d413"
@@ -38,132 +54,125 @@ Btnventi.style.backgroundColor ="black"
        Btnporte.style.backgroundColor = "black"
        divLum.style.display ="none"
        divPort.style.display ="none"
-       divVent.style.display ="flex"
+       divVent.style.display ="block"
        })
 
-       let allume=false
+       let salonAllume = false
+       let chambreAllume = false
+       let salonVentilateur = false
+       let chambreVentilateur = false
+       let porteOuverte = false
+       let alarmeActive = false
        div1.addEventListener("click",()=>{
-              allume=!allume
-              if (allume) {
+              salonVentilateur=!salonVentilateur
+              if (salonVentilateur) {
                 div1.style.transition="0.6s"
                 div1.style.justifyContent="flex-end"
                 div1.style.backgroundColor="#13d413"  
                 vsalon.textContent="Allumé"   
+
+                envoyerCommande("ventilateur-salon","on")
               }else{
                   div1.style.justifyContent="flex-start"
                   div1.style.backgroundColor="gray"  
                   vsalon.textContent="Eteinte" 
+
+                  envoyerCommande("ventilateur-salon","off")
               }
               
        })
 
        div2.addEventListener("click",()=>{
-              allume=!allume
-              if (allume) {
+              chambreVentilateur=!chambreVentilateur
+              if (chambreVentilateur) {
                 div2.style.justifyContent="flex-end"
                 div2.style.transition="0.6s"
                 div2.style.backgroundColor="#22e832"   
                 vchambre.textContent="Allumé"  
+
+                envoyerCommande("ventilateur-chambre","on")
               }else{
                   div2.style.justifyContent="flex-start"
                   div2.style.backgroundColor="gray" 
                   vchambre.textContent="Eteinte"  
+
+                  envoyerCommande("ventilateur-chambre","off")
               }
               
        })
 
        div3.addEventListener("click",()=>{
-              allume=!allume
-              if (allume) {
+              salonAllume=!salonAllume
+              if (salonAllume) {
                 div3.style.justifyContent="flex-end"
                 div3.style.transition="0.6s"
                 div3.style.backgroundColor="#22e832"  
-                Esalon.textContent="Allumée"    
+                Esalon.textContent="Allumée"   
+                
+                envoyerCommande("lampe-salon","on")
               }else{
                   div3.style.justifyContent="flex-start"
                   div3.style.backgroundColor="gray"  
-                  Esalon.textContent="Eteinte"  
+                  Esalon.textContent="Eteinte" 
+                  
+                  envoyerCommande("lampe-salon","off")
               }
               
        })
 
        div4.addEventListener("click",()=>{
-              allume=!allume
-              if (allume) {
+              chambreAllume=!chambreAllume
+              if (chambreAllume) {
                 div4.style.justifyContent="flex-end"
                 div4.style.transition="0.6s"
                 div4.style.backgroundColor="#22e832"
-                Echambre.textContent="Allumée"     
+                Echambre.textContent="Allumée"   
+                
+                envoyerCommande("lampe-chambre","on")
               }else{
                   div4.style.justifyContent="flex-start"
                   div4.style.backgroundColor="gray"  
                   Echambre.textContent="Eteinte"  
+
+                  envoyerCommande("lampe-chambre","off")
               }
               
        })
 
        div5.addEventListener("click",()=>{
-              allume=!allume
-              if (allume) {
+              porteOuverte=!porteOuverte
+              if (porteOuverte) {
                 div5.style.justifyContent="flex-end"
                 div5.style.transition="0.6s"
                 div5.style.backgroundColor="#22e832" 
-                porte.textContent="Déverrouillée"    
+                porte.textContent="Déverrouillée"  
+                
+                envoyerCommande("porte","open")
               }else{
                   div5.style.justifyContent="flex-start"
                   div5.style.backgroundColor="gray"
-                  porte.textContent="Vérrouillée"   
+                  porte.textContent="Verrouillée"  
+                  
+                  envoyerCommande("porte","close")
               }
               
        })
 
        div6.addEventListener("click",()=>{
-              allume=!allume
-              if (allume) {
+              alarmeActive=!alarmeActive
+              if (alarmeActive) {
                 div6.style.justifyContent="flex-end"
                 div6.style.transition="0.6s"
                 div6.style.backgroundColor="#22e832" 
                 alarme.textContent="Activée"    
+
+                envoyerCommande("alarme","on")
               }else{
                   div6.style.justifyContent="flex-start"
                   div6.style.backgroundColor="gray" 
                   alarme.textContent="Desactivée"  
+
+                  envoyerCommande("alarme","off")
               }
               
        })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const form = document.querySelector("#login-form");
-// const message = document.querySelector("#message");
-
-// const password = "12345678";
-
-// form.addEventListener("submit", function (e) {
-//     e.preventDefault();
-
-//     const pass = document.querySelector("#password").value;
-
-//     if (pass === password) {
-//         window.location.href = "app.html";
-//     } else {
-//         message.className ="p-3 rounded-lg mb-4 bg-red-100 text-red-700 text-center font-bold";
-//         message.textContent = "Mot de passe incorrect.";
-//     }
-// });
-
-    
-
