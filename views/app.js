@@ -13,7 +13,7 @@ let vchambre=document.getElementById("vchambre")
 let porte=document.getElementById("porte")
 let alarme=document.getElementById("alarme")
 
-const ESP32_URL = "http://192.168.1.50"
+const ESP32_URL = "http://192.168.4.1"
 
 function envoyerCommande(appareil, action) {
     fetch(`${ESP32_URL}/${appareil}/${action}`)
@@ -139,24 +139,63 @@ Btnventi.style.backgroundColor ="black"
               
        })
 
-       div5.addEventListener("click",()=>{
-              porteOuverte=!porteOuverte
-              if (porteOuverte) {
-                div5.style.justifyContent="flex-end"
-                div5.style.transition="0.6s"
-                div5.style.backgroundColor="#22e832" 
-                porte.textContent="Déverrouillée"  
-                
-                envoyerCommande("porte","open")
-              }else{
-                  div5.style.justifyContent="flex-start"
-                  div5.style.backgroundColor="gray"
-                  porte.textContent="Verrouillée"  
-                  
-                  envoyerCommande("porte","close")
-              }
-              
-       })
+       div5.addEventListener("click", () => {
+
+    if (porteOuverte) {
+
+        porteOuverte = false;
+
+        div5.style.justifyContent = "flex-start";
+        div5.style.backgroundColor = "gray";
+        porte.textContent = "Verrouillée";
+
+        envoyerCommande("porte", "close");
+
+        return;
+    }
+
+    
+    let nombreTentatives = 0;
+    let accesAutorise = false;
+
+    while (nombreTentatives < 3) {
+
+        let password = prompt("Entrer le code d'accès :");
+
+       
+        if (password === null) {
+            return;
+        }
+
+        nombreTentatives++;
+
+        if (password === "2580") {
+            accesAutorise = true;
+            break;
+        }
+
+        alert("Code incorrect !");
+    }
+
+   
+    if (!accesAutorise) {
+        alert("TENTATIVES ATTEINTES !");
+
+        envoyerCommande("alarme", "on");
+
+        return;
+    }
+
+   
+    porteOuverte = true;
+
+    div5.style.justifyContent = "flex-end";
+    div5.style.transition = "0.6s";
+    div5.style.backgroundColor = "#22e832";
+    porte.textContent = "Déverrouillée";
+
+    envoyerCommande("porte", "open");
+});
 
        div6.addEventListener("click",()=>{
               alarmeActive=!alarmeActive
