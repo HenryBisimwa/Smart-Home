@@ -82,24 +82,24 @@ Btnventi.style.backgroundColor ="black"
               
        })
 
-       div2.addEventListener("click",()=>{
-              chambreVentilateur=!chambreVentilateur
-              if (chambreVentilateur) {
-                div2.style.justifyContent="flex-end"
-                div2.style.transition="0.6s"
-                div2.style.backgroundColor="#22e832"   
-                vchambre.textContent="Allumé"  
+    //    div2.addEventListener("click",()=>{
+    //           chambreVentilateur=!chambreVentilateur
+    //           if (chambreVentilateur) {
+    //             div2.style.justifyContent="flex-end"
+    //             div2.style.transition="0.6s"
+    //             div2.style.backgroundColor="#22e832"   
+    //             vchambre.textContent="Allumé"  
 
-                envoyerCommande("ventilateur-chambre","on")
-              }else{
-                  div2.style.justifyContent="flex-start"
-                  div2.style.backgroundColor="gray" 
-                  vchambre.textContent="Eteinte"  
+    //             envoyerCommande("ventilateur-chambre","on")
+    //           }else{
+    //               div2.style.justifyContent="flex-start"
+    //               div2.style.backgroundColor="gray" 
+    //               vchambre.textContent="Eteinte"  
 
-                  envoyerCommande("ventilateur-chambre","off")
-              }
+    //               envoyerCommande("ventilateur-chambre","off")
+    //           }
               
-       })
+    //    })
 
        div3.addEventListener("click",()=>{
               salonAllume=!salonAllume
@@ -139,62 +139,130 @@ Btnventi.style.backgroundColor ="black"
               
        })
 
-       div5.addEventListener("click", () => {
+       // ===== CLAVIER DE LA PORTE =====
 
+let clavierPorte = document.getElementById("clavierPorte");
+let affichageCode = document.getElementById("affichageCode");
+let messageCode = document.getElementById("messageCode");
+let validerCode = document.getElementById("validerCode");
+let annulerCode = document.getElementById("annulerCode");
+let effacerCode = document.getElementById("effacerCode");
+let touchesCode = document.querySelectorAll(".toucheCode");
+
+let codeEntre = "";
+let nombreTentatives = 0;
+
+
+// Quand on clique sur la porte
+div5.addEventListener("click", () => {
+
+    // Si la porte est déjà ouverte → on la ferme
     if (porteOuverte) {
 
         porteOuverte = false;
 
         div5.style.justifyContent = "flex-start";
         div5.style.backgroundColor = "gray";
-        porte.textContent = "Verrouillée";
+        porte.textContent = "Fermée";
 
         envoyerCommande("porte", "close");
 
         return;
     }
 
-    
-    let nombreTentatives = 0;
-    let accesAutorise = false;
+    // Sinon on affiche le clavier
+    clavierPorte.classList.remove("hidden");
 
-    while (nombreTentatives < 3) {
+    codeEntre = "";
+    affichageCode.textContent = "";
+    messageCode.textContent = "";
+});
 
-        let password = prompt("Entrer le code d'accès :");
 
-       
-        if (password === null) {
-            return;
+// Quand on appuie sur un chiffre
+touchesCode.forEach(touche => {
+
+    touche.addEventListener("click", () => {
+
+        if (codeEntre.length < 4) {
+
+            codeEntre += touche.dataset.touche;
+
+            affichageCode.textContent = "•".repeat(codeEntre.length);
         }
+    });
+});
 
+
+// Effacer le dernier chiffre
+effacerCode.addEventListener("click", () => {
+
+    codeEntre = codeEntre.slice(0, -1);
+
+    affichageCode.textContent = "•".repeat(codeEntre.length);
+});
+
+
+// Annuler
+annulerCode.addEventListener("click", () => {
+
+    clavierPorte.classList.add("hidden");
+
+    codeEntre = "";
+    affichageCode.textContent = "";
+    messageCode.textContent = "";
+});
+
+
+// Valider le code
+validerCode.addEventListener("click", () => {
+
+    if (codeEntre === "2580") {
+
+        // Code correct
+        porteOuverte = true;
+
+        div5.style.justifyContent = "flex-end";
+        div5.style.transition = "0.6s";
+        div5.style.backgroundColor = "#22e832";
+
+        porte.textContent = "Déverrouillée";
+
+        envoyerCommande("porte", "open");
+
+        messageCode.textContent = "✓ Accès autorisé";
+        messageCode.style.color = "#22e832";
+
+        setTimeout(() => {
+            clavierPorte.classList.add("hidden");
+        }, 1000);
+
+        codeEntre = "";
+
+    } else {
+
+        // Code incorrect
         nombreTentatives++;
 
-        if (password === "2580") {
-            accesAutorise = true;
-            break;
+        messageCode.textContent = "✕ Code incorrect";
+        messageCode.style.color = "#ef4444";
+
+        codeEntre = "";
+        affichageCode.textContent = "";
+
+        if (nombreTentatives >= 3) {
+
+            messageCode.textContent = "⚠️ 3 tentatives atteintes !";
+
+            envoyerCommande("alarme", "on");
+
+            setTimeout(() => {
+                clavierPorte.classList.add("hidden");
+            }, 1500);
+
+            nombreTentatives = 0;
         }
-
-        alert("Code incorrect !");
     }
-
-   
-    if (!accesAutorise) {
-        alert("TENTATIVES ATTEINTES !");
-
-        envoyerCommande("alarme", "on");
-
-        return;
-    }
-
-   
-    porteOuverte = true;
-
-    div5.style.justifyContent = "flex-end";
-    div5.style.transition = "0.6s";
-    div5.style.backgroundColor = "#22e832";
-    porte.textContent = "Déverrouillée";
-
-    envoyerCommande("porte", "open");
 });
 
        div6.addEventListener("click",()=>{
