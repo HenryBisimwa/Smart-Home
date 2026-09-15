@@ -234,6 +234,18 @@ validerCode.addEventListener("click", () => {
         messageCode.style.color = "#22e832";
 
         setTimeout(() => {
+            porteOuverte = false;
+            div5.style.justifyContent = "flex-start";
+            div5.style.transition = "0.6s";
+            div5.style.backgroundColor = "gray";
+
+            porte.textContent = "Verrouillée";
+
+        envoyerCommande("porte", "close");
+
+        }, 8000);
+
+        setTimeout(() => {
             clavierPorte.classList.add("hidden");
         }, 1000);
 
@@ -255,6 +267,19 @@ validerCode.addEventListener("click", () => {
             messageCode.textContent = "⚠️ 3 tentatives atteintes !";
 
             envoyerCommande("alarme", "on");
+
+            div6.style.justifyContent="flex-end"
+            div6.style.transition="0.6s"
+            div6.style.backgroundColor="#22e832" 
+            alarme.textContent="Activée" 
+
+            setTimeout(()=>{
+                div6.style.justifyContent="flex-start"
+                div6.style.backgroundColor="gray" 
+                alarme.textContent="Desactivée"  
+
+                envoyerCommande("alarme","off")
+            },10000)
 
             setTimeout(() => {
                 clavierPorte.classList.add("hidden");
