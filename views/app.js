@@ -12,6 +12,10 @@ let vsalon=document.getElementById("vsalon")
 let vchambre=document.getElementById("vchambre")
 let porte=document.getElementById("porte")
 let alarme=document.getElementById("alarme")
+let div8=document.getElementById("div8")
+let Eexte=document.getElementById("Eexte")
+let bt8=document.getElementById("Bt8")
+
 
 const ESP32_URL = "http://192.168.4.1"
 
@@ -48,14 +52,14 @@ Btnventi.style.backgroundColor ="black"
  divVent.style.display ="none"
 })
 
-       Btnventi.addEventListener("click",()=>{
-       Btnventi.style.backgroundColor = "#13d413"
-       Btneclairage.style.backgroundColor = "black"
-       Btnporte.style.backgroundColor = "black"
-       divLum.style.display ="none"
-       divPort.style.display ="none"
-       divVent.style.display ="block"
-       })
+Btnventi.addEventListener("click",()=>{
+Btnventi.style.backgroundColor = "#13d413"
+Btneclairage.style.backgroundColor = "black"
+Btnporte.style.backgroundColor = "black"
+divLum.style.display ="none"
+divPort.style.display ="none"
+divVent.style.display ="block"
+})
 
        let salonAllume = false
        let chambreAllume = false
@@ -63,6 +67,7 @@ Btnventi.style.backgroundColor ="black"
        let chambreVentilateur = false
        let porteOuverte = false
        let alarmeActive = false
+       let Exteallume=false
        div1.addEventListener("click",()=>{
               salonVentilateur=!salonVentilateur
               if (salonVentilateur) {
@@ -116,6 +121,25 @@ Btnventi.style.backgroundColor ="black"
                   Esalon.textContent="Eteinte" 
                   
                   envoyerCommande("lampe-salon","off")
+              }
+              
+       })
+
+        div8.addEventListener("click",()=>{
+              Exteallume=!Exteallume
+              if (Exteallume) {
+                div8.style.transition="0.6s"
+                div8.style.justifyContent="flex-end"
+                div8.style.backgroundColor="#13d413"  
+                Eexte.textContent="Allumé"   
+
+                envoyerCommande("lampe-exterieure","on")
+              }else{
+                  div8.style.justifyContent="flex-start"
+                  div8.style.backgroundColor="gray"  
+                  Eexte.textContent="Eteinte" 
+
+                  envoyerCommande("lampe-exterieure","off")
               }
               
        })
