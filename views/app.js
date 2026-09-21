@@ -125,24 +125,24 @@ divVent.style.display ="block"
               
        })
 
-        div8.addEventListener("click",()=>{
-              Exteallume=!Exteallume
-              if (Exteallume) {
-                div8.style.transition="0.6s"
-                div8.style.justifyContent="flex-end"
-                div8.style.backgroundColor="#13d413"  
-                Eexte.textContent="Allumé"   
+    //     div8.addEventListener("click",()=>{
+    //           Exteallume=!Exteallume
+    //           if (Exteallume) {
+    //             div8.style.transition="0.6s"
+    //             div8.style.justifyContent="flex-end"
+    //             div8.style.backgroundColor="#13d413"  
+    //             Eexte.textContent="Allumé"   
 
-                envoyerCommande("lampe-exterieure","on")
-              }else{
-                  div8.style.justifyContent="flex-start"
-                  div8.style.backgroundColor="gray"  
-                  Eexte.textContent="Eteinte" 
+    //             envoyerCommande("lampe-exterieure","on")
+    //           }else{
+    //               div8.style.justifyContent="flex-start"
+    //               div8.style.backgroundColor="gray"  
+    //               Eexte.textContent="Eteinte" 
 
-                  envoyerCommande("lampe-exterieure","off")
-              }
+    //               envoyerCommande("lampe-exterieure","off")
+    //           }
               
-       })
+    //    })
 
        div4.addEventListener("click",()=>{
               chambreAllume=!chambreAllume
