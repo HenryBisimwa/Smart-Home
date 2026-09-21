@@ -12,9 +12,9 @@ let vsalon=document.getElementById("vsalon")
 let vchambre=document.getElementById("vchambre")
 let porte=document.getElementById("porte")
 let alarme=document.getElementById("alarme")
-let div8=document.getElementById("div8")
-let Eexte=document.getElementById("Eexte")
-let bt8=document.getElementById("Bt8")
+// let div8=document.getElementById("div8")
+// let Eexte=document.getElementById("Eexte")
+// let bt8=document.getElementById("Bt8")
 
 
 const ESP32_URL = "http://192.168.4.1"
@@ -67,7 +67,7 @@ divVent.style.display ="block"
        let chambreVentilateur = false
        let porteOuverte = false
        let alarmeActive = false
-       let Exteallume=false
+    //    let Exteallume=false
        div1.addEventListener("click",()=>{
               salonVentilateur=!salonVentilateur
               if (salonVentilateur) {
